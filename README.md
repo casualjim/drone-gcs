@@ -1,3 +1,5 @@
+Drone plugin to publish files and artifacts to Google Cloud Storage. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
+
 ```
 mkdir dist
 touch dist/test
