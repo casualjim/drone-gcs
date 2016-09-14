@@ -12,8 +12,6 @@ import (
 var build = "0" // build number set at compile-time
 
 func main() {
-	//REMOVEME
-	godotenv.Load("env-file")
 	app := cli.NewApp()
 	app.Name = "Drone google cloud storage plugin"
 	app.Usage = "Drone google cloud storage plugin"
@@ -26,32 +24,39 @@ func main() {
 			EnvVar: "GOOGLE_KEY",
 		},
 		cli.StringFlag{
-			Name:  "source",
-			Usage: "location of files to upload",
+			Name:   "source",
+			Usage:  "location of files to upload",
+			EnvVar: "SOURCE_FILES",
 		},
 		cli.StringFlag{
-			Name:  "target",
-			Usage: "destination to copy files to, including bucket name",
+			Name:   "target",
+			Usage:  "destination to copy files to, including bucket name",
+			EnvVar: "TARGET_FILES",
 		},
 		cli.StringFlag{
-			Name:  "ignore",
-			Usage: "kip files matching this pattern, relative to source",
+			Name:   "ignore",
+			Usage:  "kip files matching this pattern, relative to source",
+			EnvVar: "IGNORE_FILES",
 		},
 		cli.StringSliceFlag{
-			Name:  "acl",
-			Usage: "list of access rules applied to the uploaded files, in a form of entity:role",
+			Name:   "acl",
+			Usage:  "list of access rules applied to the uploaded files, in a form of entity:role",
+			EnvVar: "GCS_ACL",
 		},
 		cli.StringSliceFlag{
-			Name:  "gzip",
-			Usage: "files with the specified extensions will be gzipped and uploaded with \"gzip\" Content-Encoding header",
+			Name:   "gzip",
+			Usage:  "files with the specified extensions will be gzipped and uploaded with \"gzip\" Content-Encoding header",
+			EnvVar: "GCS_GZIP",
 		},
 		cli.StringFlag{
-			Name:  "cache_control",
-			Usage: "Cache-Control header",
+			Name:   "cache_control",
+			Usage:  "Cache-Control header",
+			EnvVar: "GCS_CACHE_CONTROL",
 		},
 		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "an arbitrary dictionary with custom metadata applied to all objects",
+			Name:   "metadata",
+			Usage:  "an arbitrary dictionary with custom metadata applied to all objects",
+			EnvVar: "GCS_METADATA",
 		},
 		cli.StringFlag{
 			Name:   "repo.owner",

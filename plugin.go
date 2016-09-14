@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"math/rand"
@@ -88,13 +87,14 @@ func errorf(format string, args ...interface{}) {
 func (p Plugin) Exec() error {
 	upload_config = p.Config
 	//Temporay, read gcs auth key
-	file, e := ioutil.ReadFile(p.Config.AuthKey)
-	if e != nil {
-		fmt.Printf("File error: %v\n", e)
-		os.Exit(1)
-	}
+	//file, e := ioutil.ReadFile(p.Config.AuthKey)
+	//if e != nil {
+	//	fmt.Printf("File error: %v\n", e)
+	//	os.Exit(1)
+	//}
 
-	auth, err := google.JWTConfigFromJSON([]byte(file), storage.ScopeFullControl)
+	//auth, err := google.JWTConfigFromJSON([]byte(file), storage.ScopeFullControl)
+	auth, err := google.JWTConfigFromJSON([]byte(p.Config.AuthKey), storage.ScopeFullControl)
 	if err != nil {
 		fatalf("auth: %v", err)
 	}
@@ -163,7 +163,7 @@ func (p Plugin) run(client *storage.Client) error {
 	buf := make(chan struct{}, maxUploadFilePerTime)
 	res := make(chan *result, len(src))
 	for _, f := range src {
-		fmt.Println(f)
+		//fmt.Println(f)
 		buf <- struct{}{} // alloc one slot
 		go func(f string) {
 			rel, err := filepath.Rel(upload_config.Source, f)
@@ -171,10 +171,10 @@ func (p Plugin) run(client *storage.Client) error {
 				res <- &result{f, err}
 				return
 			}
-			fmt.Println("begin uploading")
+			//fmt.Println("begin uploading")
 			err = retryUpload(path.Join(upload_config.Target, rel), f, maxRetryUploadTimes)
 			if err != nil {
-				fmt.Println(err)
+				//fmt.Println(err)
 			}
 			res <- &result{rel, err}
 			<-buf // free up
@@ -188,7 +188,7 @@ func (p Plugin) run(client *storage.Client) error {
 			fatalf("%s: %v", r.name, r.err)
 			return r.err
 		}
-		printf(r.name)
+		//printf(r.name)
 	}
 
 	return nil
@@ -205,8 +205,8 @@ func retryUpload(dst, file string, n int) error {
 			sleep(t)
 		}
 		if err = uploadFile(dst, file); err == nil {
-			fmt.Println(err)
-			fmt.Println("retry:", i)
+			//fmt.Println(err)
+			//fmt.Println("retry:", i)
 			break
 		}
 	}
@@ -231,19 +231,19 @@ func uploadFile(dst, file string) error {
 	var metadata interface{}
 	err = json.Unmarshal([]byte(upload_config.Metadata), &metadata)
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		return err
 	}
-	fmt.Println(metadata)
+	//fmt.Println(metadata)
 	w.Metadata = make(map[string]string)
 	for k, v := range metadata.(map[string]interface{}) {
-		switch vtype := v.(type) {
+		switch v.(type) {
 		case string:
-			fmt.Println(vtype)
+			//fmt.Println(vtype)
 			w.Metadata[k] = v.(string)
 		}
 	}
-	fmt.Println(w.Metadata)
+	//fmt.Println(w.Metadata)
 	for _, s := range upload_config.Acl {
 		a := strings.SplitN(s, ":", 2)
 		if len(a) != 2 {
@@ -261,7 +261,7 @@ func uploadFile(dst, file string) error {
 	if gz {
 		w.ContentEncoding = "gzip"
 	}
-	fmt.Println("TEST")
+	//fmt.Println("TEST")
 	if _, err := io.Copy(w, r); err != nil {
 		return err
 	}
