@@ -26,37 +26,38 @@ func main() {
 		cli.StringFlag{
 			Name:   "source",
 			Usage:  "location of files to upload",
-			EnvVar: "SOURCE_FILES",
+			EnvVar: "PLUGIN_SOURCE",
 		},
 		cli.StringFlag{
 			Name:   "target",
 			Usage:  "destination to copy files to, including bucket name",
-			EnvVar: "TARGET_FILES",
+			EnvVar: "PLUGIN_TARGET",
 		},
 		cli.StringFlag{
 			Name:   "ignore",
 			Usage:  "kip files matching this pattern, relative to source",
-			EnvVar: "IGNORE_FILES",
+			EnvVar: "PLUGIN_IGNORE",
 		},
 		cli.StringSliceFlag{
 			Name:   "acl",
 			Usage:  "list of access rules applied to the uploaded files, in a form of entity:role",
-			EnvVar: "GCS_ACL",
+			EnvVar: "PLUGIN_ACL",
 		},
 		cli.StringSliceFlag{
 			Name:   "gzip",
 			Usage:  "files with the specified extensions will be gzipped and uploaded with \"gzip\" Content-Encoding header",
-			EnvVar: "GCS_GZIP",
+			EnvVar: "PLUGIN_GZIP",
 		},
 		cli.StringFlag{
 			Name:   "cache_control",
 			Usage:  "Cache-Control header",
-			EnvVar: "GCS_CACHE_CONTROL",
+			EnvVar: "PLUGIN_CACHE_CONTROL",
 		},
 		cli.StringFlag{
 			Name:   "metadata",
 			Usage:  "an arbitrary dictionary with custom metadata applied to all objects",
-			EnvVar: "GCS_METADATA",
+			Value:  "{}",
+			EnvVar: "PLUGIN_METADATA",
 		},
 		cli.StringFlag{
 			Name:   "repo.owner",
