@@ -1,0 +1,3 @@
+FROM alpine
+ADD ./binary/drone-gcs /bin/drone-gcs
+ENTRYPOINT ["/bin/drone-gcs"]

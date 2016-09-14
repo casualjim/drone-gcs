@@ -9,6 +9,6 @@ RUN mkdir -p /go/src &&\
         cd /go/src &&\
         git clone https://github.com/maplain/drone-gcs &&\
         cd drone-gcs &&\
-        go build
+        go build -o /dist/drone-gcs
 
-ENTRYPOINT ["/go/src/drone-gcs/drone-gcs"]
+# ENTRYPOINT ["/go/src/drone-gcs/drone-gcs"]
