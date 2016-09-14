@@ -6,7 +6,6 @@ to authenticate to the GCS.
 
 The following parameters are used to configure this plugin:
 
-* `auth_key` - service account auth key
 * `source` - location of files to upload
 * `target` - destination to copy files to, including bucket name
 * `ignore` - skip files matching this [pattern](https://golang.org/pkg/path/filepath/#Match), relative to `source`
@@ -15,13 +14,14 @@ The following parameters are used to configure this plugin:
 * `cache_control` - Cache-Control header
 * `metadata` - an arbitrary dictionary with custom metadata applied to all objects
 
+The following secret values can be set to configure the plugin.
+* `GOOGLE_KEY` - corresponds to auth_key
+
 The following is a sample configuration in your .drone.yml file:
 
 ```yaml
 publish:
   gcs:
-    auth_key: >
-      $SERVICE_ACCOUNT_KEY
     source: dist
     target: bucket/dir/
     ignore: bin/*
@@ -36,17 +36,4 @@ publish:
       x-goog-meta-foo: bar
 ```
 
-`SERVICE_ACCOUNT_KEY` would be defined in .drone.sec (before encryption):
-
-```yaml
-checksum: ...
-environment:
-  SERVICE_ACCOUNT_KEY: >
-    {
-    "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-    "client_email": "test@gserviceaccount.com",
-    "client_id": "12487645876234765",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://accounts.google.com/o/oauth2/token",
-    }
-```
+`GOOGLE_KEY` should be added as secret.
